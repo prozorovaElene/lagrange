@@ -1,0 +1,38 @@
+let l_num j list=
+  (fun x-> 
+     let rec numer j k lst = (
+       match lst with
+       |[] -> 1.
+       |(a,b)::t -> if (k == j) then numer j (k+1) t 
+           else (x-. a )*. numer j (k+1) t
+     )
+     in numer j 0 list );;
+
+
+
+let  l_den j list=
+  let rec auxiliary j k lst = 
+    match lst with
+    | [] -> 1.
+    | (a,b)::t -> if (k==j) then auxiliary j (k+1) t 
+        else ((fst (List.nth list j )) -. a )*. (auxiliary j (k+1) t )
+  in auxiliary j 0 list ;;
+
+
+
+  
+let div j list x = 
+  let f = (l_num j list) x
+  in
+  let g = l_den j list 
+  in f /. g 
+  
+let lagrange lst=
+  (fun x -> 
+     let rec lagr lst1 j = (
+       match lst1 with
+       |[] -> 0.
+       |(a,b)::t -> (b *. div j lst x) +. lagr t (j+1)
+     )
+     in lagr lst 0
+  );;
